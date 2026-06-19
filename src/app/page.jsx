@@ -356,8 +356,16 @@ function useQrImg(url, size) {
   return img;
 }
 
-function speak(text){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="ja-JP";u.rate=0.9;window.speechSynthesis.speak(u);}
-function stopSpeak(){window.speechSynthesis?.cancel();}
+function speak(text){
+  if(typeof window==="undefined"||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="ja-JP";u.rate=0.9;
+  window.speechSynthesis.speak(u);
+}
+function stopSpeak(){
+  if(typeof window!=="undefined")window.speechSynthesis?.cancel();
+}
 
 // ── メインアプリ ──────────────────────────────────────────────────────────────
 function SlideVideoApp() {
@@ -918,9 +926,13 @@ const uploadLabelStyle={display:"flex",alignItems:"center",justifyContent:"cente
 
 // ── ルートコンポーネント（認証ゲート付き） ─────────────────────────────────
 export default function SlideVideoMaker() {
-  const [authed, setAuthed] = useState(
-    sessionStorage.getItem(PW_KEY) === "ok"
-  );
+  const [authed, setAuthed] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setAuthed(sessionStorage.getItem(PW_KEY) === "ok");
+    }
+  }, []);
 
   if (!authed) {
     return <PasswordScreen onUnlock={() => setAuthed(true)} />;
