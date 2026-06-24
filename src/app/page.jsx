@@ -414,6 +414,7 @@ function SlideVideoApp() {
   const [videoUrl, setVideoUrl] = useState(null);
   const [recordError, setRecordError] = useState("");
   const [recordDone, setRecordDone] = useState(false);
+  const { converting, mp4Url, mp4Progress, mp4Error, convertToMp4 } = useMp4Converter();
   const [speaking, setSpeaking] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
   const [global, setGlobal] = useState({
