@@ -837,8 +837,10 @@ function SlideVideoApp() {
                 <a href={videoUrl} download="slide-video.webm" style={{display:"block",textAlign:"center",textDecoration:"none",padding:"11px 0",borderRadius:10,background:"linear-gradient(135deg,#304080,#6040a0)",color:"#e0d0ff",fontSize:13,fontWeight:"bold",letterSpacing:1}}>
                   ⬇️ ダウンロード (.webm)
                 </a>
-                <p style={{fontSize:10,opacity:0.35,margin:0,textAlign:"center"}}>出力形式：WebM（MP4への変換はiMovie / DaVinci Resolveをご利用ください）</p>
-                <p style={{fontSize:10,opacity:0.4,margin:"4px 0 0",textAlign:"center",color:"#ffcc80"}}>⚠️ iOSのSafariでは再生できない場合があります。Chromeを推奨します。</p>
+                {!mp4Url&&(<button onClick={()=>convertToMp4(videoUrl)} disabled={converting} style={{padding:"11px 0",border:"none",borderRadius:10,background:converting?"rgba(80,50,20,0.6)":"linear-gradient(135deg,#804020,#c06020)",color:"#fff8e0",fontSize:13,fontWeight:"bold",cursor:"pointer",width:"100%",marginTop:4}}>{converting?`🔄 MP4変換中 ${mp4Progress}%`:"📱 MP4に変換する（Instagram・TikTok用）"}</button>)}
+                {converting&&(<div style={{height:4,background:"rgba(255,255,255,0.1)",borderRadius:2,marginTop:4}}><div style={{height:"100%",width:`${mp4Progress}%`,background:"linear-gradient(90deg,#804020,#c06020)",borderRadius:2,transition:"width 0.3s"}}/></div>)}
+                {mp4Error&&(<div style={{padding:"8px 10px",background:"rgba(200,60,60,0.2)",border:"1px solid rgba(255,100,100,0.4)",borderRadius:8,fontSize:11,color:"#ffaaaa",marginTop:4}}>⚠️ {mp4Error}</div>)}
+                {mp4Url&&(<a href={mp4Url} download="slide-video.mp4" style={{display:"block",textAlign:"center",textDecoration:"none",padding:"13px 0",borderRadius:10,background:"linear-gradient(135deg,#206040,#40a060)",color:"#e0ffe0",fontSize:14,fontWeight:"bold",letterSpacing:1,marginTop:4}}>✅ MP4ダウンロード</a>)}
               </div>
             )}
           </div>
