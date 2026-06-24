@@ -369,6 +369,30 @@ function stopSpeak(){
 }
 
 // ── メインアプリ ──────────────────────────────────────────────────────────────
+function useMp4Converter() {
+  const [converting, setConverting] = useState(false);
+  const [mp4Url, setMp4Url] = useState(null);
+  const [mp4Progress, setMp4Progress] = useState(0);
+  const [mp4Error, setMp4Error] = useState("");
+  const convertToMp4 = useCallback(async (webmUrl) => {
+    setConverting(true);setMp4Url(null);setMp4Error("");setMp4Progress(0);
+    try {
+      const { FFmpeg } = await import("@ffmpeg/ffmpeg");
+      const { fetchFile, toBlobURL } = await import("@ffmpeg/util");
+      const ffmpeg = new FFmpeg();
+      ffmpeg.on("progress", ({ progress }) => setMp4Progress(Math.round(progress * 100)));
+      const baseURL = "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd";
+      await ffmpeg.load({ coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"), wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, "application/wasm") });
+      await ffmpeg.writeFile("input.webm", await fetchFile(webmUrl));
+      await ffmpeg.exec(["-i","input.webm","-c:v","libx264","-preset","fast","-crf","23","-c:a","aac","-movflags","+faststart","output.mp4"]);
+      const data = await ffmpeg.readFile("output.mp4");
+      setMp4Url(URL.createObjectURL(new Blob([data.buffer], { type: "video/mp4" })));
+      setMp4Progress(100);
+    } catch(e) { setMp4Error("MP4変換失敗。WebMをcloudconvert.comで変換してください。"); }
+    finally { setConverting(false); }
+  }, []);
+  return { converting, mp4Url, mp4Progress, mp4Error, convertToMp4 };
+}
 function SlideVideoApp() {
   useEffect(()=>{
     if(document.getElementById("slide-video-fonts")) return;
