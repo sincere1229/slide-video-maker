@@ -861,7 +861,7 @@ function SlideVideoApp() {
               <div style={{display:"flex",flexDirection:"column",gap:8}}>
                 <video src={videoUrl} controls width={258} style={{borderRadius:12,background:"#000"}}/>
                 <a href={videoUrl} download="slide-video.webm" style={{display:"block",textAlign:"center",textDecoration:"none",padding:"11px 0",borderRadius:10,background:"linear-gradient(135deg,#304080,#6040a0)",color:"#e0d0ff",fontSize:13,fontWeight:"bold",letterSpacing:1}}>
-                  ⬇️ ダウンロード (.webm)
+           ⬇️ WebMダウンロード
                 </a>
                 {!mp4Url&&(<button onClick={()=>convertToMp4(videoUrl)} disabled={converting} style={{padding:"11px 0",border:"none",borderRadius:10,background:converting?"rgba(80,50,20,0.6)":"linear-gradient(135deg,#804020,#c06020)",color:"#fff8e0",fontSize:13,fontWeight:"bold",cursor:"pointer",width:"100%",marginTop:4}}>{converting?`🔄 MP4変換中 ${mp4Progress}%`:"📱 MP4に変換する（Instagram・TikTok用）"}</button>)}
                 {converting&&(<div style={{height:4,background:"rgba(255,255,255,0.1)",borderRadius:2,marginTop:4}}><div style={{height:"100%",width:`${mp4Progress}%`,background:"linear-gradient(90deg,#804020,#c06020)",borderRadius:2,transition:"width 0.3s"}}/></div>)}
